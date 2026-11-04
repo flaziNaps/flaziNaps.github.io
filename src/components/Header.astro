@@ -7,7 +7,7 @@ const links = [['', '首页'], ['posts/', '文章'], ['about/', '关于']];
 <a class="skip-link" href="#main">跳到正文</a>
 <header class="site-header">
   <div class="shell header-inner">
-    <a class="brand" href={path()}>{site.name}</a>
+    <a class="brand" href={path()}><img class="brand-avatar" src={path('avatar.jpg')} alt={`${site.name} 的头像`} width="28" height="28" />{site.name}</a>
     <nav aria-label="主导航">
       {links.map(([url,label]) => <a href={path(url)} aria-current={(url ? current.startsWith(path(url)) : current === path()) ? 'page' : undefined}>{label}</a>)}
     </nav>
