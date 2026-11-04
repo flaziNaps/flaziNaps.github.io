@@ -12,7 +12,7 @@
 }
 * {box-sizing:border-box}
 html {scroll-behavior:smooth; scroll-padding-top:calc(var(--nav-height) + 24px)}
-body {margin:0; background:var(--bg); color:var(--text); font:var(--body-size)/1.75 var(--font-sans); overflow-wrap:break-word}
+body {margin:0; background-color:var(--bg); background-image:linear-gradient(180deg, var(--surface), var(--bg) 400px); background-repeat:no-repeat; color:var(--text); font:var(--body-size)/1.75 var(--font-sans); overflow-wrap:break-word}
 [hidden] {display:none!important}
 a {color:var(--link); text-underline-offset:4px; transition:color 160ms ease-out, text-decoration-color 160ms ease-out}
 a:hover {text-decoration-color:currentColor}
@@ -49,6 +49,10 @@ main:focus {outline:none}
 .eyebrow {font-size:14px; font-weight:500; color:var(--muted); margin-bottom:16px}
 .hero h1 {font-size:var(--hero-size); line-height:1.1; margin-bottom:16px}
 .hero h1:lang(en) {letter-spacing:-.025em}
+.avatar {width:72px; height:72px; border-radius:50%; object-fit:cover; display:block; margin-bottom:24px; box-shadow:inset 0 0 0 1px rgb(0 0 0/.06)}
+.avatar-lg {width:96px; height:96px}
+.hero-text {min-width:0}
+.hero-art {display:none}
 .intro {font-size:var(--intro); line-height:1.6; color:var(--muted); max-width:700px; margin-top:20px; margin-bottom:24px}
 .hero-links {display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:24px}
 .button {display:inline-flex; justify-content:center; align-items:center; gap:12px; min-height:44px; padding:10px 16px; border:1px solid var(--control); border-radius:8px; background:white; text-decoration:none; color:var(--text); font-size:15px; font-weight:500; line-height:1.5; transition:transform 160ms ease-out}
@@ -146,3 +150,7 @@ th {background:var(--surface); font-weight:600}
 @media(min-width:700px) {:root {--page-gutter:32px; --nav-height:64px; --body-size:18px; --code-size:14px} .project-grid {grid-template-columns:repeat(2,minmax(0,1fr))} .hero {padding-block:48px 40px} .home-section {margin-top:48px} .project-body {padding:32px} .project-media {padding:24px} .page {padding-top:64px} .site-footer {margin-top:96px} .article-layout {margin-top:48px}}
 @media(min-width:1100px) {:root {--page-gutter:40px} .project-grid {grid-template-columns:repeat(12,minmax(0,1fr))} .project-grid>div {grid-column:span 6} .article-layout.has-toc {max-width:972px; display:grid; grid-template-columns:minmax(0,700px) 200px; gap:72px} .toc-mobile {display:none} .toc-desktop {display:block; min-width:0} .toc-desktop .toc {position:sticky; top:calc(var(--nav-height) + 24px); max-height:calc(100dvh - var(--nav-height) - 48px); overflow:auto}}
 @media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto} *,*:before,*:after {animation:none!important; transition:none!important} .project-card:hover,.button:active {transform:none}}
+@media(min-width:1100px) {
+  .hero {display:grid; grid-template-columns:minmax(0,1fr) minmax(0,440px); align-items:center; gap:48px}
+  .hero-art {display:block; width:100%; height:auto}
+}
