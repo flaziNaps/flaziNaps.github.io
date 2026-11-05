@@ -3,6 +3,7 @@ import Header from '../components/Header.astro';
 import { site } from '../data/site';
 import { path } from '../lib/urls';
 import { cardKey } from '../lib/og.mjs';
+import '../styles/fonts.css';
 import '../styles/global.css';
 interface Props { title: string; description?: string; article?: {title:string; date:string}; noindex?: boolean }
 const {title,description = site.description,article,noindex = false} = Astro.props;
