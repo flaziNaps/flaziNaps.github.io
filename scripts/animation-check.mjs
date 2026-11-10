@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+import {mkdir,readFile,writeFile} from 'node:fs/promises';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE || '/tmp/codex-blog-check/node_modules/playwright/index.mjs');
+const out=new URL('../evidence/animation/',import.meta.url).pathname;await mkdir(out,{recursive:true});
+const browser=await chromium.launch({executablePath:process.env.CHROME_PATH || '/home/flazi/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome',args:['--no-sandbox']});
+const context=await browser.newContext({viewport:{width:1440,height:900},recordVideo:{dir:out,size:{width:1440,height:900}}});
+const page=await context.newPage();const errors=[];const checks=[];page.on('pageerror',e=>errors.push(String(e)));
+const origin=process.env.PRODUCTION_URL || 'http://127.0.0.1:4323';
+await page.goto(origin);await page.evaluate(()=>document.fonts.ready);
+const art=page.locator('.hero-art');
+for(const [time,name] of [[0,'start'],[180,'middle'],[600,'complete']]){
+ await art.evaluate((el,time)=>{let a=el.getAnimations()[0];if(!a){el.style.animationName='none';void el.offsetWidth;el.style.animationName='';a=el.getAnimations()[0];}a.pause();a.currentTime=time;},time);
+ await page.screenshot({path:`${out}/art-${name}.png`});
+}
+await art.evaluate(el=>el.getAnimations().forEach(a=>a.finish()));
+assert.equal(await page.locator('.single-project').evaluate(el=>el.getBoundingClientRect().left),160);
+assert.equal(await page.locator('.single-project').evaluate(el=>el.getBoundingClientRect().width),720);
+checks.push('Restored desktop layout retained: project x=160px, width=720px');
+const nav=page.locator('.site-header nav a').nth(1);
+await nav.hover();await page.waitForTimeout(220);assert.equal(await nav.evaluate(el=>getComputedStyle(el,'::after').transform),'matrix(1, 0, 0, 1, 0, 0)');await page.screenshot({path:`${out}/navigation-hover.png`});
+await page.mouse.move(700,700);await page.waitForTimeout(220);assert.equal(await nav.evaluate(el=>getComputedStyle(el,'::after').transform),'matrix(0, 0, 0, 1, 0, 0)');
+await nav.focus();await page.waitForTimeout(220);assert.equal(await nav.evaluate(el=>getComputedStyle(el,'::after').transform),'matrix(1, 0, 0, 1, 0, 0)');
+checks.push('Navigation underline: hover, leave, repeated interaction and keyboard focus');
+await page.goto(origin);await page.waitForTimeout(750);assert.equal(await art.evaluate(el=>el.getAnimations().length),0);checks.push('Artwork animation finishes once without looping');
+for(const width of [1024,1440,1920]){await page.setViewportSize({width,height:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
+await page.setViewportSize({width:1440,height:900});
+await page.goto('http://127.0.0.1:4322/posts/reading-fixture/');
+await page.addStyleTag({content:await readFile(new URL('../src/styles/global.css',import.meta.url),'utf8')});
+await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async text=>{window.copied=text;window.calls=(window.calls||0)+1;}}}));
+const button=page.locator('.copy-button').first();await button.click();await button.dispatchEvent('click');await page.waitForTimeout(180);
+assert.equal(await page.evaluate(()=>window.calls),1);assert.equal(await page.evaluate(()=>window.copied),await page.locator('.code-block code').first().textContent());
+assert.equal(await button.textContent(),'已复制');assert.equal(await button.evaluate(el=>getComputedStyle(el).color),'rgb(33, 110, 57)');assert.ok(await button.evaluate(el=>el===document.activeElement));
+await page.screenshot({path:`${out}/copy-success.png`});await page.waitForTimeout(2100);assert.equal(await button.textContent(),'复制');
+await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async()=>{throw Error('Denied')}}}));await button.click();assert.equal(await page.locator('.copy-status').first().textContent(),'复制失败，请手动复制');assert.equal(await page.locator('.copy-status').first().evaluate(el=>getComputedStyle(el).animationName),'none');await page.screenshot({path:`${out}/copy-failure.png`});
+checks.push('Fixture with current CSS: exact copy, green confirmation, reset, no reentry or focus loss; failure is immediate');
+const reduced=await browser.newContext({reducedMotion:'reduce',viewport:{width:1440,height:900}});const rp=await reduced.newPage();await rp.goto(origin);
+assert.equal(await rp.locator('.hero-art').evaluate(el=>getComputedStyle(el).animationName),'none');assert.equal(await rp.locator('.hero-art').evaluate(el=>getComputedStyle(el).clipPath),'none');
+await rp.locator('.site-header nav a').nth(1).hover();assert.equal(await rp.locator('.site-header nav a').nth(1).evaluate(el=>getComputedStyle(el,'::after').transitionDuration),'0s');await rp.screenshot({path:`${out}/reduced-motion.png`});
+const nojs=await browser.newContext({javaScriptEnabled:false});const np=await nojs.newPage();await np.goto(origin);await np.waitForTimeout(750);assert.equal(await np.locator('h1').textContent(),'flazi');assert.equal(await np.locator('.hero-art').evaluate(el=>getComputedStyle(el).clipPath),'none');checks.push('Reduced motion renders the artwork instantly; no-JS content and CSS remain usable');
+assert.deepEqual(errors,[]);const video=page.video();await context.close();await video.saveAs(`${out}/desktop-demo.webm`);await video.delete();
+await writeFile(`${out}/checks.json`,JSON.stringify({browser:browser.version(),checks,errors},null,2));await browser.close();console.log('Animation checks passed');

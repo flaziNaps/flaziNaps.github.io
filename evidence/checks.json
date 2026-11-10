@@ -1,0 +1,25 @@
+{
+  "browser": "156.0.8078.4",
+  "checks": [
+    "1024px home: single H1, no page overflow",
+    "1024px posts: single H1, no page overflow",
+    "1024px article: single H1, no page overflow",
+    "1024px about: single H1, no page overflow",
+    "1024px 404: single H1, no page overflow",
+    "1440px home: single H1, no page overflow",
+    "1440px posts: single H1, no page overflow",
+    "1440px article: single H1, no page overflow",
+    "1440px about: single H1, no page overflow",
+    "1440px 404: single H1, no page overflow",
+    "1920px home: single H1, no page overflow",
+    "1920px posts: single H1, no page overflow",
+    "1920px article: single H1, no page overflow",
+    "1920px about: single H1, no page overflow",
+    "1920px 404: single H1, no page overflow",
+    "First-viewport project entrance, aligned sections, keyboard skip/focus, card hover",
+    "Native section links and active table of contents",
+    "Separate fixture: copy original text, success, denied permission, callout rendering",
+    "200% zoom, no-JS content and TOC, reduced-motion"
+  ],
+  "errors": []
+}

@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/styles/global.css"
+        ],
+        "createdAt": "2026-11-10T06:38:09.400Z",
+        "reason": "Agent: line 113 styles semantic Markdown blockquotes with a neutral gray quotation rule, not a decorative card accent; preserve the incumbent reading convention."
+      }
+    ]
+  }
+}

@@ -3,17 +3,20 @@
   --font-sans: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-serif: "Lora", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", Georgia, serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-  --bg: #FFFFFF; --surface: #F5F5F7; --text: #1D1D1F; --muted: #626269; --link: #0066CC;
-  --line: #E5E5EA; --control: #86868B; --success: #216E39; --error: #B42318;
+  --bg: #FFFFFF; --surface: #F5F5F7; --text: #24323D; --muted: #586976; --link: #23608B;
+  --wash: #F3F7FA; --accent-surface: #EDF5FA; --selection: #D9EAF6;
+  --line: #DFE7EC; --control: #7C8C98; --success: #216E39; --error: #B42318;
   --ease-out-spring: cubic-bezier(0.16, 1, 0.3, 1);
   --nav-height: 60px; --page-gutter: 20px; --body-size: 17px; --code-size: 13px;
   --h1: clamp(32px, 3.2vw, 44px); --hero-size: clamp(40px, 4.5vw, 64px);
   --h2: clamp(24px, 2vw, 28px); --h3: clamp(20px, 1.6vw, 22px); --intro: clamp(18px, 1.65vw, 22px);
   --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-6:24px; --space-8:32px; --space-12:48px; --space-16:64px; --space-24:96px;
 }
-* {box-sizing:border-box}
+* {box-sizing:border-box; scrollbar-color:var(--control) var(--surface)}
 html {scroll-behavior:smooth; scroll-padding-top:calc(var(--nav-height) + 24px)}
-body {margin:0; background-color:var(--bg); background-image:linear-gradient(180deg, var(--surface), var(--bg) 400px); background-repeat:no-repeat; color:var(--text); font:var(--body-size)/1.75 var(--font-serif); overflow-wrap:break-word}
+body {margin:0; min-height:100svh; display:flex; flex-direction:column; background-color:var(--bg); background-image:linear-gradient(180deg, var(--wash), var(--bg) 400px); background-repeat:no-repeat; color:var(--text); font:var(--body-size)/1.75 var(--font-serif); overflow-wrap:break-word}
+body>main {flex:1}
+::selection {background:var(--selection); color:var(--text)}
 [hidden] {display:none!important}
 a {color:var(--link); text-underline-offset:4px; transition:color 160ms ease-out, text-decoration-color 160ms ease-out}
 a:hover {text-decoration-color:currentColor}
@@ -39,8 +42,10 @@ img {max-width:100%; height:auto; display:block}
 .brand-avatar {width:28px; height:28px; border-radius:50%; object-fit:cover; box-shadow:inset 0 0 0 1px rgb(0 0 0/.06)}
 nav {display:flex}
 .site-header nav {flex-shrink:0; gap:4px}
-.site-header nav a {display:flex; align-items:center; justify-content:center; min-width:44px; min-height:44px; padding:10px 8px; font-size:14px; font-weight:500; color:var(--muted); text-decoration:none}
-.site-header nav a[aria-current] {color:var(--text); text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:7px}
+.site-header nav a {position:relative; display:flex; align-items:center; justify-content:center; min-width:44px; min-height:44px; padding:10px 8px; font-size:14px; font-weight:500; color:var(--muted); text-decoration:none}
+.site-header nav a::after {content:""; position:absolute; inset:auto 8px 7px; height:2px; background:currentColor; transform:scaleX(0); transform-origin:left; transition:transform 180ms var(--ease-out-spring)}
+.site-header nav a[aria-current],.site-header nav a:hover {color:var(--link)}
+.site-header nav a:is([aria-current],:hover,:focus-visible)::after {transform:scaleX(1)}
 .skip-link {position:fixed; left:20px; top:-100px; z-index:30; padding:12px 20px; background:white}
 .skip-link:focus {top:8px}
 main:focus {outline:none}
@@ -49,7 +54,6 @@ main:focus {outline:none}
 .site-footer a {display:inline-flex; align-items:center; min-height:44px; min-width:44px}
 .hero {position:relative; overflow:hidden; padding-block:40px 32px}
 .hero .intro {margin-top:0; margin-bottom:0}
-.eyebrow {font-size:14px; font-weight:500; color:var(--muted); margin-bottom:16px}
 .hero h1 {font-size:var(--hero-size); line-height:1.1; margin-bottom:16px}
 .hero h1:lang(en) {letter-spacing:-.025em}
 .hero-art {position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 42%; pointer-events:none; mask-image:linear-gradient(to bottom,#000 60%,rgb(0 0 0/.8) 74%,rgb(0 0 0/.3) 90%,transparent)}
@@ -58,9 +62,8 @@ main:focus {outline:none}
 .hero-links {display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:24px}
 .button {display:inline-flex; justify-content:center; align-items:center; gap:12px; min-height:44px; padding:10px 16px; border:1px solid var(--control); border-radius:8px; background:white; text-decoration:none; color:var(--text); font-size:15px; font-weight:500; line-height:1.5; transition:transform 160ms ease-out}
 .button:active {transform:scale(.98); transition-duration:100ms}
-.primary {background:var(--link); border-color:var(--link); color:white}
 .text-link,.section-heading>a,.project-links a,.back-link {display:inline-flex; align-items:center; gap:8px; min-height:44px; min-width:44px; font-size:15px}
-.text-link {padding:10px 4px}
+.text-link {padding-block:10px}
 .home-section {margin-top:32px}
 .hero + .home-section {margin-top:0}
 .home-empty {margin:24px 0 0; color:var(--muted)}
@@ -69,11 +72,12 @@ main:focus {outline:none}
 .single-project {max-width:720px}
 .single-project .project-grid {grid-template-columns:minmax(0,1fr)}
 .single-project .project-grid>div {grid-column:auto}
+.recent-posts {max-width:720px}
 .section-heading {display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:24px}
 .empty-state {padding-block:24px; border-top:1px solid var(--line); color:var(--muted)}
 .project-grid {display:grid; grid-template-columns:1fr; gap:24px}
 .project-grid>div {min-width:0}
-.project-card {height:100%; background:var(--surface); border-radius:16px; overflow:hidden; box-shadow:inset 0 0 0 1px rgb(0 0 0/.06); transition:transform 220ms var(--ease-out-spring), box-shadow 220ms var(--ease-out-spring)}
+.project-card {height:100%; background:var(--accent-surface); border-radius:16px; overflow:hidden; box-shadow:inset 0 0 0 1px rgb(0 0 0/.06); transition:transform 220ms var(--ease-out-spring), box-shadow 220ms var(--ease-out-spring)}
 @media(hover:hover) and (pointer:fine) {.project-card:hover {transform:translateY(-3px); box-shadow:inset 0 0 0 1px rgb(0 0 0/.06), 0 8px 24px rgb(0 0 0/.06)}}
 .project-body {padding:24px}
 .project-body p {margin:12px 0 16px; color:var(--muted); font-size:16px}
@@ -91,7 +95,7 @@ main:focus {outline:none}
 .post-meta {display:flex; align-items:center; flex-wrap:wrap; gap:8px 16px; font-variant-numeric:tabular-nums}
 .summary {font-size:16px; color:var(--muted); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0}
 .year-label {margin:40px 0 24px}
-.page {padding-top:48px; min-height:50vh}
+.page {padding-top:48px}
 .page-heading {margin-bottom:40px}
 .article-layout {margin:40px auto 0; max-width:700px}
 .article {min-width:0; width:100%}
@@ -100,6 +104,7 @@ main:focus {outline:none}
 .article-heading h1 {margin-bottom:20px}
 .article-heading .intro {margin-top:0}
 .prose {line-height:1.75}
+.prose a {overflow-wrap:anywhere}
 .prose p {margin-bottom:1.25em}
 .prose h2 {margin:48px 0 16px}
 .prose h3 {margin:32px 0 12px}
@@ -113,14 +118,16 @@ main:focus {outline:none}
 .prose :not(pre)>code {font: .86em var(--font-mono); background:var(--surface); padding:2px 5px; border-radius:4px; overflow-wrap:anywhere}
 .code-block {position:relative; margin:24px 0; border-radius:12px; background:var(--surface); overflow:hidden}
 .code-toolbar {display:flex; align-items:center; justify-content:space-between; min-height:52px; padding:4px 12px 4px 20px; border-bottom:1px solid var(--line); font:13px var(--font-mono); color:var(--muted)}
-.copy-button {width:96px; height:44px; border:1px solid var(--control); border-radius:8px; background:transparent; font:14px/1.5 var(--font-sans); transition:background 160ms ease-out,border-color 160ms ease-out}
+.copy-button {width:96px; height:44px; border:1px solid var(--control); border-radius:8px; background:transparent; font:14px/1.5 var(--font-sans); transition:background 160ms ease-out,border-color 160ms ease-out,color 160ms ease-out,transform 100ms ease-out}
 .copy-button:hover,.copy-button:focus-visible {background:white; border-color:var(--text)}
+.copy-button:active:not([aria-disabled]) {transform:scale(.98)}
+.code-block:has(.copy-status[data-state=success]) .copy-button {background:#edf8ee; border-color:var(--success); color:var(--success)}
 .copy-button[aria-disabled] {cursor:default}
 .code-block pre {margin:0; padding:20px; max-width:100%; overflow-x:auto; background:var(--surface)!important; font:var(--code-size)/1.65 var(--font-mono); tab-size:2; white-space:pre; overflow-wrap:normal}
 .code-block code {font:inherit}
 .copy-status {display:block; padding-inline:20px; font-size:14px; line-height:1.6}
 .copy-status:not(:empty) {padding-bottom:12px}
-.copy-status[data-state=success] {color:var(--success)}
+.copy-status[data-state=success] {color:var(--success); animation:copy-confirm 120ms ease-out}
 .copy-status[data-state=error] {color:var(--error)}
 .table-scroll {max-width:100%; overflow:auto; margin:24px 0}
 table {border-collapse:collapse; width:100%; font-size:16px; white-space:normal}
@@ -134,9 +141,10 @@ th {background:var(--surface); font-weight:600}
 .toc-mobile {margin-bottom:32px; border-block:1px solid var(--line); padding:8px 0}
 .toc-mobile summary {padding:10px 4px; min-height:44px; font-size:15px; font-weight:500}
 .toc {display:flex; flex-direction:column; font-size:14px; line-height:1.5}
-.toc a {display:block; min-height:44px; padding:12px 12px; border-left:2px solid transparent; color:var(--muted); text-decoration:none; transition:color 150ms ease-out,border-color 150ms ease-out}
+.toc a {display:block; min-height:44px; padding:12px 12px; border-left:2px solid transparent; color:var(--muted); text-decoration:none; transition:color 150ms ease-out,border-color 150ms ease-out,background-color 150ms ease-out}
 .toc a.subheading {padding-left:24px}
-.toc a[aria-current] {border-color:var(--link); color:var(--link); font-weight:500}
+.toc a[aria-current] {border-color:var(--link); color:var(--link); background:var(--accent-surface); font-weight:500}
+.toc a:hover {color:var(--text); background:var(--surface)}
 .toc-label {font-size:13px; margin:0 0 12px 14px; color:var(--muted)}
 .author-note {margin-top:48px; padding-top:24px; border-top:1px solid var(--line)}
 .author-note p {margin:0 0 8px}
@@ -147,13 +155,10 @@ th {background:var(--surface); font-weight:600}
 .giscus-mount iframe {width:100%; border:0}
 .entrance {animation:enter 360ms var(--ease-out-spring) both; animation-delay:var(--delay,0ms)}
 @keyframes enter {from {opacity:0; transform:translateY(6px)} to {opacity:1; transform:translateY(0)}}
-@supports(animation-timeline:scroll()) {
-  .hero-art {animation:hero-recede linear both}
-  /* Different selectors prevent minification into a shorthand Chrome rejects. */
-  .hero > .hero-art {animation-timeline:scroll(root); animation-range:0px 560px}
-  @keyframes hero-recede {from {opacity:1} to {opacity:.15}}
-}
+.hero-art {animation:art-unfold 600ms var(--ease-out-spring)}
+@keyframes art-unfold {from {clip-path:inset(0 0 0 100%); opacity:.4} to {clip-path:inset(0); opacity:1}}
+@keyframes copy-confirm {from {opacity:.4} to {opacity:1}}
 @media(max-width:360px) {:root {--page-gutter:16px}}
-@media(min-width:700px) {:root {--page-gutter:32px; --nav-height:64px; --body-size:18px; --code-size:14px} .project-grid {grid-template-columns:repeat(2,minmax(0,1fr))} .hero {width:100vw; margin-inline:calc(50% - 50vw); min-height:clamp(480px,37.5vw,600px); display:flex; align-items:center; padding-block:64px 80px} .hero-inner {width:min(1120px,calc(100% - var(--page-gutter)*2)); margin-inline:auto} .hero .intro {max-width:480px} .hero h1 {font-size:clamp(56px,4.5vw,72px)} .home-section {margin-top:48px} .project-body {padding:32px} .project-media {padding:24px} .page {padding-top:64px} .site-footer {margin-top:96px} .article-layout {margin-top:48px}}
+@media(min-width:700px) {:root {--page-gutter:32px; --nav-height:64px; --body-size:18px; --code-size:14px} .project-grid {grid-template-columns:repeat(2,minmax(0,1fr))} .hero {width:100vw; margin-inline:calc(50% - 50vw); min-height:360px; display:flex; align-items:center; padding-block:64px 48px} .hero-inner {width:min(1120px,calc(100% - var(--page-gutter)*2)); margin-inline:auto} .hero .intro {max-width:480px} .hero h1 {font-size:clamp(56px,4.5vw,72px)} .home-section {margin-top:48px} .project-body {padding:32px} .project-media {padding:24px} .page {padding-top:64px} .site-footer {margin-top:96px} .article-layout {margin-top:48px}}
 @media(min-width:1100px) {:root {--page-gutter:40px} .project-grid {grid-template-columns:repeat(12,minmax(0,1fr))} .project-grid>div {grid-column:span 6} .article-layout.has-toc {max-width:972px; display:grid; grid-template-columns:minmax(0,700px) 200px; gap:72px} .toc-mobile {display:none} .toc-desktop {display:block; min-width:0} .toc-desktop .toc {position:sticky; top:calc(var(--nav-height) + 24px); max-height:calc(100dvh - var(--nav-height) - 48px); overflow:auto}}
-@media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto} *,*:before,*:after {animation:none!important; transition:none!important} .project-card:hover,.button:active {transform:none}}
+@media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto} *,*:before,*:after {animation:none!important; transition:none!important} .project-card:hover,.button:active,.copy-button:active:not([aria-disabled]) {transform:none}}

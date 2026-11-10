@@ -1,0 +1,11 @@
+{
+  "browser": "156.0.8078.4",
+  "checks": [
+    "Restored desktop layout retained: project x=160px, width=720px",
+    "Navigation underline: hover, leave, repeated interaction and keyboard focus",
+    "Artwork animation finishes once without looping",
+    "Fixture with current CSS: exact copy, green confirmation, reset, no reentry or focus loss; failure is immediate",
+    "Reduced motion renders the artwork instantly; no-JS content and CSS remain usable"
+  ],
+  "errors": []
+}
