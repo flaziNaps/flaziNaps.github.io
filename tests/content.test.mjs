@@ -4,6 +4,8 @@ import {readFile} from 'node:fs/promises';
 import {published,readingTime,validDate,shanghaiDate} from '../src/lib/content.mjs';
 import {alerts,markdownContract,htmlEnhancements} from '../src/lib/markdown.mjs';
 import rehypeRaw from 'rehype-raw';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import {createMarkdownProcessor} from '@astrojs/markdown-remark';
 test('日期、稳定排序、草稿和未来日期隔离、冲突', () => {
   assert.equal(validDate('2026-02-30'),false); assert.equal(validDate('2024-02-29'),true);
@@ -18,7 +20,17 @@ test('阅读估算排除 frontmatter / 标记 / 代码 / URL', () => {
   assert.equal(readingTime('中'.repeat(200)+' word'.repeat(100)),1);
   assert.equal(readingTime('---\ntitle: '+ '中'.repeat(800)+'\n---\n```js\n'+'a '.repeat(1000)+'\n```\nhttps://example.com/'+ 'x'.repeat(1000)),1);
 });
-const processor = await createMarkdownProcessor({smartypants:false,remarkPlugins:[markdownContract,alerts],rehypePlugins:[rehypeRaw,[htmlEnhancements,{base:'/garden/'}]],shikiConfig:{theme:'github-light'}});
+const processor = await createMarkdownProcessor({smartypants:false,remarkPlugins:[remarkMath,markdownContract,alerts],rehypePlugins:[rehypeRaw,rehypeKatex,[htmlEnhancements,{base:'/garden/'}]],shikiConfig:{theme:'github-light'}});
+test('公式静态渲染分数与矩阵，保留 MathML，代码中的公式不转换',async()=> {
+  const source = '行内 $x^2 + \\frac{1}{2}$。\n\n$$\nA=\\begin{bmatrix}1&2\\\\3&4\\end{bmatrix}\n$$\n\n```text\n$x$\n$$\n\\frac{a}{b}\n$$\n```';
+  const {code} = await processor.render(source);
+  assert.equal((code.match(/class="katex"/g) ?? []).length,2);
+  assert.ok(code.includes('class="katex-display"'));
+  assert.match(code,/class="katex-display"[^>]*tabindex="0"[^>]*aria-label="数学公式，可横向滚动"/);
+  assert.ok(code.includes('<math')); assert.ok(code.includes('<mfrac>')); assert.ok(code.includes('<mtable'));
+  assert.equal((code.match(/class="code-block"/g) ?? []).length,1);
+  assert.ok(code.includes('$x$')); assert.ok(code.includes('\\frac{a}{b}'));
+});
 test('外链不追加装饰箭头，原文和代码箭头保留',async()=> {
   const {code} = await processor.render('[GitHub](https://github.com)\n\n方向 → 下一步\n\n```text\nA → B\n```');
   assert.match(code, /<a href="https:\/\/github.com">GitHub<\/a>/);

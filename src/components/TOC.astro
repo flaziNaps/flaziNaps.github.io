@@ -2,5 +2,17 @@
 import type { MarkdownHeading } from 'astro';
 interface Props {headings: MarkdownHeading[]; mobile?: boolean}
 const {headings,mobile = false} = Astro.props;
+const groups: {heading: MarkdownHeading; children: MarkdownHeading[]}[] = [];
+for (const heading of headings) {
+  const parent = groups.at(-1);
+  if (heading.depth === 3 && parent?.heading.depth === 2) parent.children.push(heading);
+  else groups.push({heading, children: []});
+}
 ---
-{mobile ? <details class="toc-mobile"><summary>文章目录</summary><nav class="toc" aria-label="文章目录">{headings.map(h => <a href={`#${h.slug}`} class:list={[{'subheading':h.depth===3}]}>{h.text}</a>)}</nav></details> : <aside class="toc-desktop"><nav class="toc" aria-label="文章目录"><p class="toc-label">本页目录</p>{headings.map(h => <a href={`#${h.slug}`} class:list={[{'subheading':h.depth===3}]}>{h.text}</a>)}</nav></aside>}
+{mobile ? <details class="toc-mobile"><summary>文章目录</summary><nav class="toc" aria-label="文章目录">{headings.map(h => <a href={`#${h.slug}`} class:list={[{'subheading':h.depth===3}]}>{h.text}</a>)}</nav></details> : <aside class="toc-desktop"><nav class="toc" aria-label="文章目录">
+  <div class="toc-heading"><p class="toc-label">文章目录</p>{groups.some(group => group.children.length > 0) && <button class="toc-expand" type="button" aria-controls="toc-sections" aria-expanded="true" hidden>收起小节</button>}</div>
+  <div class="toc-links" id="toc-sections">{groups.map(group => <div class="toc-group">
+    <a href={`#${group.heading.slug}`} class:list={['toc-section', {'subheading':group.heading.depth === 3}]}>{group.heading.text}</a>
+    {group.children.length > 0 && <div class="toc-sublist">{group.children.map(h => <a href={`#${h.slug}`} class="subheading">{h.text}</a>)}</div>}
+  </div>)}</div>
+</nav></aside>}

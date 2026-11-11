@@ -13,7 +13,7 @@
   --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-6:24px; --space-8:32px; --space-12:48px; --space-16:64px; --space-24:96px;
 }
 * {box-sizing:border-box; scrollbar-color:var(--control) var(--surface)}
-html {scroll-behavior:smooth; scroll-padding-top:calc(var(--nav-height) + 24px)}
+html {scroll-behavior:smooth}
 body {margin:0; min-height:100svh; display:flex; flex-direction:column; background-color:var(--bg); background-image:linear-gradient(180deg, var(--wash), var(--bg) 400px); background-repeat:no-repeat; color:var(--text); font:var(--body-size)/1.75 var(--font-serif); overflow-wrap:break-word}
 body>main {flex:1}
 ::selection {background:var(--selection); color:var(--text)}
@@ -99,10 +99,12 @@ main:focus {outline:none}
 .page-heading {margin-bottom:40px}
 .article-layout {margin:40px auto 0; max-width:700px}
 .article {min-width:0; width:100%}
-.article-heading {margin-bottom:40px}
+.article-heading {margin-bottom:32px; padding-bottom:24px; border-bottom:1px solid var(--line)}
 .back-link {margin-bottom:24px}
-.article-heading h1 {margin-bottom:20px}
-.article-heading .intro {margin-top:0}
+.article-heading h1 {margin-bottom:16px; line-height:1.25; text-wrap:balance}
+.article-heading .intro {margin-top:0; font-size:20px}
+.article-body {line-height:1.85}
+.article-body>:first-child {margin-top:0}
 .prose {line-height:1.75}
 .prose a {overflow-wrap:anywhere}
 .prose p {margin-bottom:1.25em}
@@ -116,6 +118,9 @@ main:focus {outline:none}
 .prose hr {border:0; border-top:1px solid var(--line); margin:40px 0}
 .prose img {border-radius:8px; margin:24px auto}
 .prose :not(pre)>code {font: .86em var(--font-mono); background:var(--surface); padding:2px 5px; border-radius:4px; overflow-wrap:anywhere}
+.prose .katex {font-size:1.1em}
+.prose .katex-display {max-width:100%; overflow-x:auto; overflow-y:hidden; padding:8px 0; margin:24px 0}
+.prose .katex-display>.katex {width:max-content; min-width:100%}
 .code-block {position:relative; margin:24px 0; border-radius:12px; background:var(--surface); overflow:hidden}
 .code-toolbar {display:flex; align-items:center; justify-content:space-between; min-height:52px; padding:4px 12px 4px 20px; border-bottom:1px solid var(--line); font:13px var(--font-mono); color:var(--muted)}
 .copy-button {width:96px; height:44px; border:1px solid var(--control); border-radius:8px; background:transparent; font:14px/1.5 var(--font-sans); transition:background 160ms ease-out,border-color 160ms ease-out,color 160ms ease-out,transform 100ms ease-out}
@@ -141,11 +146,18 @@ th {background:var(--surface); font-weight:600}
 .toc-mobile {margin-bottom:32px; border-block:1px solid var(--line); padding:8px 0}
 .toc-mobile summary {padding:10px 4px; min-height:44px; font-size:15px; font-weight:500}
 .toc {display:flex; flex-direction:column; font-size:14px; line-height:1.5}
-.toc a {display:block; min-height:44px; padding:12px 12px; border-left:2px solid transparent; color:var(--muted); text-decoration:none; transition:color 150ms ease-out,border-color 150ms ease-out,background-color 150ms ease-out}
-.toc a.subheading {padding-left:24px}
-.toc a[aria-current] {border-color:var(--link); color:var(--link); background:var(--accent-surface); font-weight:500}
-.toc a:hover {color:var(--text); background:var(--surface)}
-.toc-label {font-size:13px; margin:0 0 12px 14px; color:var(--muted)}
+.toc a {display:block; min-height:44px; padding:8px 12px; border-left:1px solid transparent; color:var(--muted); font-weight:400; text-decoration:none; transition:color 150ms ease-out,border-color 150ms ease-out}
+.toc a.subheading {padding-left:24px; font-size:13px; font-weight:400; color:var(--muted)}
+.toc a[aria-current] {border-color:var(--link); color:var(--link)}
+.toc a:hover {color:var(--link)}
+.toc-label {flex:none; font-size:13px; font-weight:500; margin:0 0 8px 16px; color:var(--muted)}
+.toc-heading {flex:none; display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:44px; padding:0 4px 8px 16px}
+.toc-heading .toc-label {margin:0}
+.toc-expand {min-height:44px; min-width:44px; padding:8px 4px; border:0; background:none; color:var(--link); font:12px/1.5 var(--font-sans); text-decoration:underline; text-underline-offset:4px}
+.toc-group+.toc-group {margin-top:4px}
+.toc-group:has(.toc-sublist [aria-current])>.toc-section {color:var(--text)}
+.toc-desktop[data-compact] .toc-group:not(:has([aria-current])):not(:focus-within) .toc-sublist {display:none}
+.toc-links {min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; padding:4px}
 .author-note {margin-top:48px; padding-top:24px; border-top:1px solid var(--line)}
 .author-note p {margin:0 0 8px}
 .author-note a {display:inline-flex; align-items:center; min-height:44px; min-width:44px; font-size:15px}
@@ -160,5 +172,6 @@ th {background:var(--surface); font-weight:600}
 @keyframes copy-confirm {from {opacity:.4} to {opacity:1}}
 @media(max-width:360px) {:root {--page-gutter:16px}}
 @media(min-width:700px) {:root {--page-gutter:32px; --nav-height:64px; --body-size:18px; --code-size:14px} .project-grid {grid-template-columns:repeat(2,minmax(0,1fr))} .hero {width:100vw; margin-inline:calc(50% - 50vw); min-height:360px; display:flex; align-items:center; padding-block:64px 48px} .hero-inner {width:min(1120px,calc(100% - var(--page-gutter)*2)); margin-inline:auto} .hero .intro {max-width:480px} .hero h1 {font-size:clamp(56px,4.5vw,72px)} .home-section {margin-top:48px} .project-body {padding:32px} .project-media {padding:24px} .page {padding-top:64px} .site-footer {margin-top:96px} .article-layout {margin-top:48px}}
-@media(min-width:1100px) {:root {--page-gutter:40px} .project-grid {grid-template-columns:repeat(12,minmax(0,1fr))} .project-grid>div {grid-column:span 6} .article-layout.has-toc {max-width:972px; display:grid; grid-template-columns:minmax(0,700px) 200px; gap:72px} .toc-mobile {display:none} .toc-desktop {display:block; min-width:0} .toc-desktop .toc {position:sticky; top:calc(var(--nav-height) + 24px); max-height:calc(100dvh - var(--nav-height) - 48px); overflow:auto}}
+@media(min-width:1100px) {:root {--page-gutter:40px} .project-grid {grid-template-columns:repeat(12,minmax(0,1fr))} .project-grid>div {grid-column:span 6} .article-layout.has-toc {max-width:1020px; display:grid; grid-template-columns:minmax(0,700px) 200px; gap:120px} .toc-mobile {display:none} .toc-desktop {display:block; position:sticky; align-self:start; top:calc(var(--nav-height) + 24px); min-width:0} .toc-desktop .toc {max-height:calc(100dvh - var(--nav-height) - 72px)}}
+@media(min-width:1140px) {.article-layout.has-toc {max-width:1060px; grid-template-columns:minmax(0,700px) 240px}}
 @media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto} *,*:before,*:after {animation:none!important; transition:none!important} .project-card:hover,.button:active,.copy-button:active:not([aria-disabled]) {transform:none}}

@@ -54,6 +54,9 @@ export function htmlEnhancements({base = '/'} = {}) {
           node.properties.loading = 'lazy'; node.properties.decoding = 'async';
         }
         if (node.tagName === 'table') return el('div', {className:['table-scroll'], tabIndex:0, role:'region', 'aria-label':'表格，可横向滚动'}, [node]);
+        if (node.properties.className?.includes('katex-display')) {
+          Object.assign(node.properties, {tabIndex:0, role:'region', 'aria-label':'数学公式，可横向滚动'});
+        }
         if (node.tagName === 'pre') {
           const language = node.properties['data-language'] || 'text';
           const toolbar = el('div', {className:['code-toolbar']}, [el('span', {}, [text(language)]), el('button', {type:'button', className:['copy-button'], hidden:true}, [text('复制')])]);

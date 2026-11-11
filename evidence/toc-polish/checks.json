@@ -1,0 +1,147 @@
+{
+  "browser": "156.0.8078.4",
+  "checks": [
+    "Seven real block formulas render with MathML, no KaTeX errors, and local fonts load",
+    "1100/1120/1140/1280/1440/1920px × 600/900px: 700px body, 120px gap, responsive 200/240px TOC, bounded scrolling, no page overflow",
+    "TOC hierarchy: 14px/500 main, 13px/400 indented subheadings, transparent active background with 1px marker, targets >=44px",
+    "TOC label stays fixed while links scroll; keyboard focus and active item remain visible; manual exploration does not reset; native hash survives refresh",
+    "Synthetic long formula scrolls locally without clipping the page",
+    "Narrow desktop and 200% CSS zoom use the native expandable TOC",
+    "Math and long TOC render without JavaScript"
+  ],
+  "dimensions": [
+    {
+      "width": 1100,
+      "height": 600,
+      "articleWidth": 700,
+      "gap": 120,
+      "sidebarWidth": 200,
+      "sidebarTop": 113,
+      "sidebarBottom": 577,
+      "scrollHeight": 1765,
+      "clientHeight": 437
+    },
+    {
+      "width": 1100,
+      "height": 900,
+      "articleWidth": 700,
+      "gap": 120,
+      "sidebarWidth": 200,
+      "sidebarTop": 113,
+      "sidebarBottom": 877,
+      "scrollHeight": 1765,
+      "clientHeight": 737
+    },
+    {
+      "width": 1120,
+      "height": 600,
+      "articleWidth": 700,
+      "gap": 120,
+      "sidebarWidth": 200,
+      "sidebarTop": 113,
+      "sidebarBottom": 577,
+      "scrollHeight": 1765,
+      "clientHeight": 437
+    },
+    {
+      "width": 1120,
+      "height": 900,
+      "articleWidth": 700,
+      "gap": 120,
+      "sidebarWidth": 200,
+      "sidebarTop": 113,
+      "sidebarBottom": 877,
+      "scrollHeight": 1765,
+      "clientHeight": 737
+    },
+    {
+      "width": 1140,
+      "height": 600,
+      "articleWidth": 700,
+      "gap": 120,
+      "sidebarWidth": 240,
+      "sidebarTop": 113,
+      "sidebarBottom": 577,
+      "scrollHeight": 1547,
+      "clientHeight": 437
+    },
+    {
+      "width": 1140,
+      "height": 900,
+      "articleWidth": 700,
+      "gap": 120,
+      "sidebarWidth": 240,
+      "sidebarTop": 113,
+      "sidebarBottom": 877,
+      "scrollHeight": 1547,
+      "clientHeight": 737
+    },
+    {
+      "width": 1280,
+      "height": 600,
+      "articleWidth": 700,
+      "gap": 120,
+      "sidebarWidth": 240,
+      "sidebarTop": 113,
+      "sidebarBottom": 577,
+      "scrollHeight": 1547,
+      "clientHeight": 437
+    },
+    {
+      "width": 1280,
+      "height": 900,
+      "articleWidth": 700,
+      "gap": 120,
+      "sidebarWidth": 240,
+      "sidebarTop": 113,
+      "sidebarBottom": 877,
+      "scrollHeight": 1547,
+      "clientHeight": 737
+    },
+    {
+      "width": 1440,
+      "height": 600,
+      "articleWidth": 700,
+      "gap": 120,
+      "sidebarWidth": 240,
+      "sidebarTop": 113,
+      "sidebarBottom": 577,
+      "scrollHeight": 1547,
+      "clientHeight": 437
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "articleWidth": 700,
+      "gap": 120,
+      "sidebarWidth": 240,
+      "sidebarTop": 113,
+      "sidebarBottom": 877,
+      "scrollHeight": 1547,
+      "clientHeight": 737
+    },
+    {
+      "width": 1920,
+      "height": 600,
+      "articleWidth": 700,
+      "gap": 120,
+      "sidebarWidth": 240,
+      "sidebarTop": 113,
+      "sidebarBottom": 577,
+      "scrollHeight": 1547,
+      "clientHeight": 437
+    },
+    {
+      "width": 1920,
+      "height": 900,
+      "articleWidth": 700,
+      "gap": 120,
+      "sidebarWidth": 240,
+      "sidebarTop": 113,
+      "sidebarBottom": 877,
+      "scrollHeight": 1547,
+      "clientHeight": 737
+    }
+  ],
+  "errors": []
+}

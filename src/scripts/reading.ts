@@ -22,6 +22,19 @@ const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
 const headings = [...document.querySelectorAll<HTMLElement>('.article-body h2[id], .article-body h3[id]')];
 if (links.length && headings.length && 'IntersectionObserver' in window) {
   let pending = false;
+  const sidebar = document.querySelector<HTMLElement>('.toc-desktop');
+  const expand = sidebar?.querySelector<HTMLButtonElement>('.toc-expand');
+  if (sidebar && expand) {
+    sidebar.setAttribute('data-compact','');
+    expand.hidden = false;
+    expand.textContent = '展开全部';
+    expand.setAttribute('aria-expanded','false');
+    expand.addEventListener('click', () => {
+      const compact = sidebar.toggleAttribute('data-compact');
+      expand.textContent = compact ? '展开全部' : '收起小节';
+      expand.setAttribute('aria-expanded',String(!compact));
+    });
+  }
   function update() {
     pending = false;
     const offset = document.querySelector('header.site-header')!.getBoundingClientRect().bottom + 24;
@@ -29,8 +42,17 @@ if (links.length && headings.length && 'IntersectionObserver' in window) {
     for (const heading of headings) { if (heading.getBoundingClientRect().top <= offset + 1) active = heading; }
     if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) active = headings.at(-1)!;
     for (const link of links) {
-      if (decodeURIComponent(link.hash.slice(1)) === active.id) link.setAttribute('aria-current','location');
-      else link.removeAttribute('aria-current');
+      if (decodeURIComponent(link.hash.slice(1)) === active.id) {
+        const changed = !link.hasAttribute('aria-current');
+        link.setAttribute('aria-current','location');
+        const container = link.closest<HTMLElement>('.toc-links');
+        if (changed && container && container.clientHeight) {
+          const item = link.getBoundingClientRect();
+          const bounds = container.getBoundingClientRect();
+          if (item.top < bounds.top) container.scrollTop += item.top - bounds.top - 4;
+          else if (item.bottom > bounds.bottom) container.scrollTop += item.bottom - bounds.bottom + 4;
+        }
+      } else link.removeAttribute('aria-current');
     }
   }
   function schedule() { if (!pending) { pending = true; requestAnimationFrame(update); } }

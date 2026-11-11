@@ -1,5 +1,7 @@
 import { defineConfig } from 'astro/config';
 import rehypeRaw from 'rehype-raw';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import { unified } from '@astrojs/markdown-remark';
 import { existsSync } from 'node:fs';
 import { alerts, markdownContract, htmlEnhancements } from './src/lib/markdown.mjs';
@@ -12,7 +14,7 @@ export default defineConfig({
   site, base, output: 'static', trailingSlash: 'always', compressHTML: true,
   devToolbar: { enabled: false },
   markdown: {
-    processor: unified({ smartypants: false, remarkPlugins: [markdownContract, alerts], rehypePlugins: [rehypeRaw, [htmlEnhancements, {base}]] }),
+    processor: unified({ smartypants: false, remarkPlugins: [remarkMath, markdownContract, alerts], rehypePlugins: [rehypeRaw, rehypeKatex, [htmlEnhancements, {base}]] }),
     shikiConfig: { theme: 'github-light-high-contrast', transformers: [{
       pre(node) { node.properties['data-language'] = this.options.lang || 'text'; },
     }] },
