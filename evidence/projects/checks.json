@@ -1,0 +1,16 @@
+{
+  "browser": "156.0.8078.4",
+  "widths": [
+    1024,
+    1440,
+    1920
+  ],
+  "checks": [
+    "two projects in configured order",
+    "correct GitHub destinations",
+    "blog screenshot decodes at 1902×933 with alt text",
+    "KV card has no fabricated image",
+    "two desktop columns and no page overflow"
+  ],
+  "errors": []
+}
